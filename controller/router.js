@@ -1,7 +1,8 @@
-var file = require("../models/file.js")
+var file = require("../models/file.js");
+console.log(file.getAllAlbums);
 exports.showIndex = function(req,res){
     res.render("index",{
-    	"albums":file.getAllAlbums()
+    	"albums":file.getAllAlbums
     });
 }
 
