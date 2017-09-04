@@ -1,15 +1,23 @@
 var file = require("../models/file.js")
-var files = file.getAllAlbums((files) => {
-	console.log(files)
-    return files;
-});
-console.log(files);
+
 exports.showIndex = function(req, res) {
-    res.render("index", {
-        "albums": ['1','2','3']
+    var files = file.getAllAlbums((files) => {
+        res.render("index", {
+            "albums": files
+        });
     });
 }
 
 exports.showAlbum = function(req, res) {
+    var albumName = req.params.albumName;
+    file.getAllImageByAlbumName(albumName, (err, imgArray) => {
+        if (err) {
+            console.log(err);
+        }
+        res.render("album", {
+            "albumName": albumName,
+            "images": imgArray
+        });
 
+    })
 }
