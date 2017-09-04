@@ -1,6 +1,8 @@
 var express = require("express");
-var app = express();
 var router = require("./controller/router.js");
+
+var app = express();
+
 app.set("view engine","ejs");
 
 app.use(express.static("./public"));

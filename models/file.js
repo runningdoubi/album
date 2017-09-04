@@ -1,55 +1,34 @@
 var fs = require("fs");
-
 var uploadsURL = "./uploads";
 var allAlbums = [];
 
-(() => {
-    var promise = new Promise((resolve, reject) => {
+exports.getAllAlbums = (callback) => {
+    new Promise((resolve, reject) => {
         fs.readdir(uploadsURL, (err, files) => {
+            if (err) {
+                reject(err);
+            }
             resolve(files);
         })
     }).then((files) => {
-        var albumsFiles = [];
-        var promise2 = new Promise((resolve, reject) => {
-            files.forEach((file, index) => {
-                fs.stat(`${uploadsURL}/${file}`, (err, stats) => {
-                    if (stats.isDirectory()) {
-                        albumsFiles.push(file);
-                        if (index == files.length - 1) {
-                            resolve(albumsFiles);
-                        }
-                    }
-                })
-            });
-        }).then((albumsFiles) => {
-            allAlbums = albumsFiles;
-            console.log(allAlbums)
-        })
-    });
-})();
-
-function getAllFiles() {
-    new Promise((resolve, reject) => {
-        fs.readdir(uploadsURL, (err, files) => {
-            resolve(files);
-        })
-    })
-}
-
-function getDirectory(files) {
-    var allAlbums = [];
-    new Promise((resolve, reject) => {
-        for (let i = 0; i < files.length; i++) {
+        var albums = [];
+        var len = files.length;
+        (function isDir(i) {
+            if (i == len){
+                callback(albums);
+                return;
+            };
             fs.stat(`${uploadsURL}/${files[i]}`, (err, stats) => {
                 if (stats.isDirectory()) {
-                    allAlbums.push(files[i]);
+                    albums.push(files[i]);
                 }
-                if (i == files.length - 1) {
-                    resolve(allAlbums);
-                    console.log("allAlbums1", allAlbums);
-                }
+                i++;
+                isDir(i);
             })
-        }
-    })
+        })(0);
+    }, (err) => {
+        console.log(err);
+    });
 }
+
 exports.getAllAlbums = allAlbums;
