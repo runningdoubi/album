@@ -7,8 +7,13 @@ app.set("view engine","ejs");
 
 app.use(express.static("./public"));
 app.use(express.static("./uploads"));
+
 app.get("/",router.showIndex);
-app.get("/:albumName",router.showAlbum)
+app.get("/up",router.showUp);
+app.post("/up",router.doPost);
+
+app.get("/:albumName",router.showAlbum);
+
 app.use((req, res) => {
     res.render("404");
 })
